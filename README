@@ -5,6 +5,9 @@ Simple PHP script to rebuild the Thunderbird's popstate.dat file. Primarily
 useful when Thunderbird crashes and after starts retrieving all messages
 that have been kept on the mail server.
 
+Please note that no attempt has been made to make this the best code I ever
+wrote...
+
 Usage
 -----
 usage: rebuild_popstate.php [-d] [-i n] [-s] [-v] [-f file] server [ port ]
