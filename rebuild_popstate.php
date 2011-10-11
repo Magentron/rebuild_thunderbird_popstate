@@ -7,6 +7,18 @@
 	 *	@since		2011/Oct/10
 	 *	@copyright	(c) 2011 Jeroen Derks
 	 *	@license	http://www.apache.org/licenses/LICENSE-2.0
+	 *
+	 *	Licensed under the Apache License, Version 2.0 (the "License");
+	 *	you may not use this file except in compliance with the License.
+	 *	You may obtain a copy of the License at
+	 *	
+	 *	http://www.apache.org/licenses/LICENSE-2.0
+	 *	
+	 *	Unless required by applicable law or agreed to in writing, software
+	 *	distributed under the License is distributed on an "AS IS" BASIS,
+	 *	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	 *	See the License for the specific language governing permissions and
+	 *	limitations under the License.
 	 */
 	define('PROG',      basename(IsSet($_SERVER['argv']) ? $_SERVER['argv'][0] : $_SERVER['SCRIPT_NAME']));
 	define('VERSION',   '1.0');
@@ -18,11 +30,11 @@
 	//	Defaults
 	//
 
-	$flag_debug   = 0;               // debug flag
-	$flag_secure  = 0;               // secure connection (SSL/TLS) flag
-	$flag_verbose = 0;               // verbose flag
-	$output_file  = 'popstate.dat';  // output file
-	$skip_count   = 0;               // skip number of last messages
+	$flag_debug   = 0;                         // debug flag
+	$flag_secure  = 0;                         // secure connection (SSL/TLS) flag
+	$flag_verbose = 0;                         // verbose flag
+	$output_file  = 'popstate.dat.GENERATED';  // output file
+	$skip_count   = 0;                         // skip number of last messages
 
 
 	//////////////////////////////////////////////////////////////////////////////
@@ -375,10 +387,10 @@ _EOF_;
 	{
 		fputs(STDERR, 'usage: ' . PROG . " [-d] [-i n] [-s] [-v] [-f file] server [ port ]\n");
 		fputs(STDERR, "\t-d\tdebug flag\n");
+		fputs(STDERR, "\t-f\toutput filename (if popstate.dat, Thunderbird needs to be closed!)\n");
 		fputs(STDERR, "\t-i\tignore the last n messages (for if you don't have them yet)\n");
 		fputs(STDERR, "\t-s\tuse for secure POP3 (SSL/TLS)\n");
 		fputs(STDERR, "\t-v\tverbose flag\n");
-		fputs(STDERR, "\t-f\toutput filename\n");
 
 		if ( $message )
 			fputs(STDERR, PROG . ': ' . $message . "\n");
