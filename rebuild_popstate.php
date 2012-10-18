@@ -21,7 +21,7 @@
 	 *	limitations under the License.
 	 */
 	define('PROG',      basename(IsSet($_SERVER['argv']) ? $_SERVER['argv'][0] : $_SERVER['SCRIPT_NAME']));
-	define('VERSION',   '1.0');
+	define('VERSION',   '1.1');
 	define('ISWIN',     'WIN' == strtoupper(substr(PHP_OS, 0, 3)));
 	define('MSG_STATE', 'k');
 
@@ -173,14 +173,14 @@
 
 	function do_uidls( $fp, $skip_count )
 	{
-		global $flag_verbose;
-		verbose('retrieving list of UIDL\'s... ', false);
+		global $flag_verbose, $flag_debug;
+		verbose('retrieving list of UIDL\'s... ', $flag_debug);
 
 		write_line($fp, 'UIDL');
 		skip($fp);
 
 		$uidls = read_lines($fp, '.', $flag_verbose);
-		if ( $flag_verbose )
+		if ( $flag_verbose && !$flag_debug )
 			echo "\n";
 
 		verbose('parsing list of UIDL\'s');
@@ -247,7 +247,7 @@ _EOF_;
 			if ( $end == substr($line, 0, strlen($end)) )
 			{
 				if ( $do_runner )
-					echo ' ';
+					echo ' ' . chr(8);
 
 				return $result;
 			}
@@ -276,7 +276,7 @@ _EOF_;
 
 	function write_line( $fp, $line )
 	{
-		debug('PUTS: ' . $line); 
+		debug('PUTS: ' . preg_replace('/^PASS .*$/', 'PASS ********', $line)); 
 		fputs($fp, $line . "\n");
 	}
 

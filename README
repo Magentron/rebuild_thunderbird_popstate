@@ -13,7 +13,6 @@ closed, otherwise you might have more problems.
 Please note that no attempt has been made to make this the best code I ever
 wrote...
 
-NB: when
 NB: Windows support is there, but never tested!
 
 Usage
@@ -27,7 +26,7 @@ usage: rebuild_popstate.php [-d] [-i n] [-s] [-v] [-f file] server [ port ]
 
 License
 -------
-Copyright (c) 2011 Jeroen Derks
+Copyright (c) 2011-2012 Jeroen Derks
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
