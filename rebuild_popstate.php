@@ -21,7 +21,7 @@
 	 *	limitations under the License.
 	 */
 	define('PROG',      basename(IsSet($_SERVER['argv']) ? $_SERVER['argv'][0] : $_SERVER['SCRIPT_NAME']));
-	define('VERSION',   '1.1');
+	define('VERSION',   '1.2');
 	define('ISWIN',     'WIN' == strtoupper(substr(PHP_OS, 0, 3)));
 	define('MSG_STATE', 'k');
 
@@ -30,6 +30,7 @@
 	//	Defaults
 	//
 
+	$flag_crlf    = 0;                         // CRLF flag
 	$flag_debug   = 0;                         // debug flag
 	$flag_secure  = 0;                         // secure connection (SSL/TLS) flag
 	$flag_verbose = 0;                         // verbose flag
@@ -42,7 +43,7 @@
 	//
 
 	// header
-	fputs(STDERR, PROG . '/' . VERSION . " Copyright (c) 2011 Jeroen Derks, Apache License 2.0\n");
+	fputs(STDERR, PROG . '/' . VERSION . " Copyright (c) 2011 Jeroen Derks, Apache License 2.0" . PHP_EOL);
 
 	// process command line parameters
 	$argc = $_SERVER['argc'];
@@ -63,9 +64,11 @@
 			{
 				switch ( $arg[$i] )
 				{
+					case 'c':	++$flag_crlf;    break;
 					case 'd':	++$flag_debug;   break;
 					case 's':	++$flag_secure;  break;
 					case 'v':	++$flag_verbose; break;
+
 					case 'f':
 						if ( 3 > count($argv) )
 							usage('missing file after -f');
@@ -96,13 +99,14 @@
 		usage();
 
 	if ( 2 < count($argv) )
-		if ( !is_numeric($argv[2]) )
+		if ( is_numeric($argv[2]) )
 			$port = $argv[2];
 		else
 			usage();
 	else
 		$port = $flag_secure ? 995 : 110;
 
+	debug("flag_crlf    = " . $flag_crlf);
 	debug("flag_debug   = " . $flag_debug);
 	debug("flag_secure  = " . $flag_secure);
 	debug("flag_verbose = " . $flag_verbose);
@@ -181,7 +185,7 @@
 
 		$uidls = read_lines($fp, '.', $flag_verbose);
 		if ( $flag_verbose && !$flag_debug )
-			echo "\n";
+			echo PHP_EOL;
 
 		verbose('parsing list of UIDL\'s');
 
@@ -215,7 +219,7 @@
 _EOF_;
 		$time = time();
 		foreach ( $uidls as $uidl )
-			$data .= MSG_STATE . ' ' . $uidl . ' ' . $time . "\n";
+			$data .= MSG_STATE . ' ' . $uidl . ' ' . $time . PHP_EOL;
 
 		file_put_contents($filename, $data);
 	}
@@ -276,8 +280,10 @@ _EOF_;
 
 	function write_line( $fp, $line )
 	{
+		global $flag_crlf;
+		
 		debug('PUTS: ' . preg_replace('/^PASS .*$/', 'PASS ********', $line)); 
-		fputs($fp, $line . "\n");
+		fputs($fp, $line . ($flag_crlf ? "\r\n" : "\n"));
 	}
 
 	/**
@@ -324,12 +330,12 @@ _EOF_;
 			// enable echo again
 			stty_echo(true);
 		}
-		fputs(STDOUT, "\n");
+		fputs(STDOUT, PHP_EOL);
 
 		if ( false === $result )
 			error('failed to read password', 6);
 
-		return rtrim($result, "\n");
+		return rtrim($result, "\r\n");
 	}
 
 	/**
@@ -363,7 +369,7 @@ _EOF_;
 	function error( $message, $exitcode = 2 )
 	{
 		global $php_errormsg;
-		fputs(STDERR, date('Y-m-d H:i:s') . ': ' . PROG . ': ' . $message . ($php_errormsg ? " ($php_errormsg)" : '') . "\n");
+		fputs(STDERR, date('Y-m-d H:i:s') . ': ' . PROG . ': ' . $message . ($php_errormsg ? " ($php_errormsg)" : '') . PHP_EOL);
 		exit($exitcode);
 	}
 
@@ -372,7 +378,7 @@ _EOF_;
 		global $flag_verbose;
 
 		if ( $flag_verbose )
-			echo date('Y-m-d H:i:s') . ' ' . $message . ($do_eol ? "\n" : '');
+			echo date('Y-m-d H:i:s') . ' ' . $message . ($do_eol ? PHP_EOL : '');
 	}
 
 	function debug( $message )
@@ -380,20 +386,21 @@ _EOF_;
 		global $flag_debug;
 
 		if ( $flag_debug )
-			fputs(STDERR, date('Y-m-d H:i:s') . ' DEBUG: ' . $message . "\n");
+			fputs(STDERR, date('Y-m-d H:i:s') . ' DEBUG: ' . $message . PHP_EOL);
 	}
 
 	function usage( $message = null )
 	{
-		fputs(STDERR, 'usage: ' . PROG . " [-d] [-i n] [-s] [-v] [-f file] server [ port ]\n");
-		fputs(STDERR, "\t-d\tdebug flag\n");
-		fputs(STDERR, "\t-f\toutput filename (if popstate.dat, Thunderbird needs to be closed!)\n");
-		fputs(STDERR, "\t-i\tignore the last n messages (for if you don't have them yet)\n");
-		fputs(STDERR, "\t-s\tuse for secure POP3 (SSL/TLS)\n");
-		fputs(STDERR, "\t-v\tverbose flag\n");
+		fputs(STDERR, 'usage: ' . PROG . " [-d] [-i n] [-s] [-v] [-f file] server [ port ]" . PHP_EOL);
+		fputs(STDERR, "\t-c\tdebug flag" . PHP_EOL);
+		fputs(STDERR, "\t-d\tdebug flag". PHP_EOL);
+		fputs(STDERR, "\t-f\toutput filename (if popstate.dat, Thunderbird needs to be closed!)". PHP_EOL);
+		fputs(STDERR, "\t-i\tignore the last n messages (for if you don't have them yet)". PHP_EOL);
+		fputs(STDERR, "\t-s\tuse for secure POP3 (SSL/TLS)". PHP_EOL);
+		fputs(STDERR, "\t-v\tverbose flag". PHP_EOL);
 
 		if ( $message )
-			fputs(STDERR, PROG . ': ' . $message . "\n");
+			fputs(STDERR, PROG . ': ' . $message . PHP_EOL);
 
 		exit(1);
 	}
