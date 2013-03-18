@@ -5,7 +5,7 @@
 	 *
 	 *	@author 	Jeroen Derks
 	 *	@since		2011/Oct/10
-	 *	@copyright	(c) 2011 Jeroen Derks
+	 *	@copyright	(c) 2011-2013 Jeroen Derks
 	 *	@license	http://www.apache.org/licenses/LICENSE-2.0
 	 *
 	 *	Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,7 +43,7 @@
 	//
 
 	// header
-	fputs(STDERR, PROG . '/' . VERSION . " Copyright (c) 2011 Jeroen Derks, Apache License 2.0" . PHP_EOL);
+	fputs(STDERR, PROG . '/' . VERSION . " Copyright (c) 2011-2013 Jeroen Derks, Apache License 2.0" . PHP_EOL);
 
 	// process command line parameters
 	$argc = $_SERVER['argc'];
