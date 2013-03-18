@@ -18,6 +18,7 @@ NB: Windows support is there, but never tested!
 Usage
 -----
 usage: rebuild_popstate.php [-d] [-i n] [-s] [-v] [-f file] server [ port ]
+    -c      CRLF flag, use when talking to Windows servers
     -d      debug flag
 	-f      output filename (if popstate.dat, Thunderbird needs to be closed!)
 	-i      ignore the last n messages (for if you don't have them yet)

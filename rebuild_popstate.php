@@ -83,6 +83,11 @@
 						$skip_count = (integer) $argv[1];
 						break;
 
+					case 'h':
+					case 'H':
+					case '?':
+						usage();
+
 					default:	usage('unknown flag: -' . $arg[$i]);
 				}
 			}
@@ -392,7 +397,7 @@ _EOF_;
 	function usage( $message = null )
 	{
 		fputs(STDERR, 'usage: ' . PROG . " [-d] [-i n] [-s] [-v] [-f file] server [ port ]" . PHP_EOL);
-		fputs(STDERR, "\t-c\tdebug flag" . PHP_EOL);
+		fputs(STDERR, "\t-c\tCRLF flag, use when talking to Windows servers" . PHP_EOL);
 		fputs(STDERR, "\t-d\tdebug flag". PHP_EOL);
 		fputs(STDERR, "\t-f\toutput filename (if popstate.dat, Thunderbird needs to be closed!)". PHP_EOL);
 		fputs(STDERR, "\t-i\tignore the last n messages (for if you don't have them yet)". PHP_EOL);
